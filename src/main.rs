@@ -1,3 +1,5 @@
+use std::io::prelude::*
+use std::net::TcpStream;
 use std::net::TcpListener;
 
 fn main() {
@@ -6,6 +8,12 @@ fn main() {
     for stream in listner.incoming() {
         let stream = stream.unwrap();
 
-        println!("接続が確率しました");
+        handle_connection(stream);
     }
+}
+
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 1024];
+    stream.read(&mut buffer).unwrap();
+    println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
 }
